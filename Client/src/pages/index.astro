@@ -1,0 +1,22 @@
+---
+import { MainLayout } from "@widgets/layouts";
+import { NftCard } from "@entities/nft";
+--- 
+
+<MainLayout title="QR code component">
+	<main class="main">
+		<h1 class="visually-hidden">NFT preview card component</h1>
+		<NftCard />
+	</main>
+</MainLayout>
+
+<style>
+	.main {
+		background: var(--very-dark-blue-main-bg);
+		min-width: 100%;
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
