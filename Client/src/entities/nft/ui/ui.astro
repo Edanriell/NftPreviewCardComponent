@@ -1,6 +1,73 @@
 ---
 ---
 
+<script>
+	import gsap from "gsap";
+
+	const nftCardLinks = document.querySelectorAll("[data-nft-card-link]");
+
+	nftCardLinks.forEach(link => {
+		link.addEventListener("mouseup", (event:Event) => handleLinkMouseUp(event))
+		link.addEventListener("mousedown", (event:Event) => handleLinkMouseDown(event))
+		link.addEventListener("mouseenter", (event:Event) => handleLinkMouseEnter(event))
+		link.addEventListener("mouseleave", (event:Event) => handleLinkMouseLeave(event))
+		link.addEventListener("touchstart", (event:Event) => handleLinkTouchStart(event))
+		link.addEventListener("touchend", (event:Event) => handleLinkTouchEnd(event))
+	})
+
+	const handleLinkMouseUp = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 1,
+			duration: 0.25,
+			ease: "power2"
+		});
+	}
+
+	const handleLinkMouseDown = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 0.95,
+			duration: 0.25,
+			ease: "power2"
+		});
+	}
+
+	const handleLinkMouseEnter  = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 1,
+			color: "#00fff8",
+			duration: 0.25,
+			ease: "power2"
+		});
+	}
+
+	const handleLinkMouseLeave  = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 1,
+			color: "#fff",
+			duration: 0.25,
+			ease: "power2"
+		});
+	}
+
+	const handleLinkTouchStart = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 0.95,
+			color: "#00fff8",
+			duration: 0.25,
+			ease: "power2"
+		});
+	};
+
+	const handleLinkTouchEnd = (event: Event) => {
+		gsap.to(event.target, {
+			scale: 1,
+			color: "#fff",
+			duration: 0.25,
+			ease: "power2"
+		});
+	};
+</script>
+
 <article class="nft-card">
 	<header>
 		<a class="nft-card__image-wrapper" href="#">
@@ -19,7 +86,9 @@
 		</a>
 	</header>
 	<div class="nft-card__content">
-		<a class="nft-card__title-wrapper" href="#"><h2 class="nft-card__title">Equilibrium #3429</h2></a>
+		<a class="nft-card__title-wrapper" href="#">
+			<h2 data-nft-card-link class="nft-card__title">Equilibrium #3429</h2>
+		</a>
 		<p class="nft-card__description">Our Equilibrium collection promotes balance and calm.</p>
 		<div class="nft-card__additional-information">
 			<div class="nft-card__price-wrapper">
@@ -50,7 +119,8 @@
 			/>
 		</picture>
 		<p class="nft-card__creator-text">
-			Creation of <a class="nft-card__creator-link" href="#">Jules Wyvern</a>
+			Creation of
+			<a data-nft-card-link class="nft-card__creator-link" href="#">Jules Wyvern</a>
 		</p>
 	</footer>
 </article>
@@ -204,6 +274,8 @@
 		font-size: 1.5rem;
 		color: var(--white);
 		text-decoration: none;
+		position: relative;
+		display: inline-block;
 
 		@media (width >= 768px) {
 			font-size: 1.6rem;
