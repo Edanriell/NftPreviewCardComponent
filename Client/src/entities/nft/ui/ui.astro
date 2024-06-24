@@ -8,7 +8,7 @@
 	let currentWindowWidth = window.innerWidth;
 
 	const nftCardLinks = document.querySelectorAll("[data-nft-card-link]");
-	const nftCardImageLink = document.querySelector("[data-nft-card-image-link]");
+	const nftCardImage = document.querySelector("[data-nft-card-image-link]");
 	const nftCardImageBackground = document.querySelector("[data-nft-card-image-background]");
 	const nftCardImageIcon = document.querySelector("[data-nft-card-image-icon]");
 	const nftCardOverlay = document.querySelector("[data-nft-card-overlay]");
@@ -22,11 +22,11 @@
 		link.addEventListener("touchend", (event:Event) => handleLinkTouchEnd(event));
 	})
 
-	nftCardImageLink!.addEventListener("click", () => handleImageClick());
-	nftCardImageLink!.addEventListener("mouseenter", () => handleImageMouseEnter());
-	nftCardImageLink!.addEventListener("mouseleave", () => handleImageMouseLeave());
-	nftCardImageLink!.addEventListener("touchstart", () => handleImageTouchStart());
-	nftCardImageLink!.addEventListener("touchend", () => handleImageTouchEnd());
+	nftCardImage!.addEventListener("click", () => handleImageClick());
+	nftCardImage!.addEventListener("mouseenter", () => handleImageMouseEnter());
+	nftCardImage!.addEventListener("mouseleave", () => handleImageMouseLeave());
+	nftCardImage!.addEventListener("touchstart", () => handleImageTouchStart());
+	nftCardImage!.addEventListener("touchend", () => handleImageTouchEnd());
 
 	nftCardOverlay!.addEventListener("click", () => handleOverlayClick());
 
@@ -101,7 +101,7 @@
 			ease: "power1"
 		});
 
-		gsap.to(nftCardImageLink, {
+		gsap.to(nftCardImage, {
 			scale: currentWindowWidth >= 768 ? 1.6 : 1.24,
 			translateY: currentWindowWidth >= 768 ? "42%" : "38%",
 			duration: 0.25,
@@ -132,13 +132,13 @@
 			ease: "power1",
 		})
 
-		gsap.to(nftCardImageLink, {
+		gsap.to(nftCardImage, {
 			scale: 1,
 			translateY: 0,
 			duration: 0.25,
 			ease: "power1",
 			onComplete: () => {
-				gsap.to(nftCardImageLink, {
+				gsap.to(nftCardImage, {
 					cursor: "pointer",
 				});
 				isImagePreviewActive = false;
