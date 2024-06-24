@@ -5,6 +5,7 @@
 	import gsap from "gsap";
 
 	let isImagePreviewActive = false;
+	let currentWindowWidth = window.innerWidth;
 
 	const nftCardLinks = document.querySelectorAll("[data-nft-card-link]");
 	const nftCardImageLink = document.querySelector("[data-nft-card-image-link]");
@@ -28,6 +29,10 @@
 	nftCardImageLink!.addEventListener("touchend", () => handleImageTouchEnd());
 
 	nftCardOverlay!.addEventListener("click", () => handleOverlayClick());
+
+	window.addEventListener("resize", () => {
+		currentWindowWidth = window.innerWidth;
+	});
 
 	const handleLinkMouseUp = (event: Event) => {
 		gsap.to(event.target, {
@@ -97,8 +102,8 @@
 		});
 
 		gsap.to(nftCardImageLink, {
-			scale: 1.6,
-			translateY: "40%",
+			scale: currentWindowWidth >= 768 ? 1.6 : 1.24,
+			translateY: currentWindowWidth >= 768 ? "42%" : "38%",
 			duration: 0.25,
 			cursor: "default",
 			ease: "power1",
