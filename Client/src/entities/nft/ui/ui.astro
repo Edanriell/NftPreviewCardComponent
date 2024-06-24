@@ -4,10 +4,13 @@
 <script>
 	import gsap from "gsap";
 
+	let isImagePreviewActive = false;
+
 	const nftCardLinks = document.querySelectorAll("[data-nft-card-link]");
 	const nftCardImageLink = document.querySelector("[data-nft-card-image-link]");
 	const nftCardImageBackground = document.querySelector("[data-nft-card-image-background]");
 	const nftCardImageIcon = document.querySelector("[data-nft-card-image-icon]");
+	const nftCardOverlay = document.querySelector("[data-nft-card-overlay]");
 
 	nftCardLinks.forEach(link => {
 		link.addEventListener("mouseup", (event:Event) => handleLinkMouseUp(event));
@@ -18,12 +21,13 @@
 		link.addEventListener("touchend", (event:Event) => handleLinkTouchEnd(event));
 	})
 
-	nftCardImageLink!.addEventListener("mouseup", (event:Event) => handleImageLinkMouseUp(event));
-	nftCardImageLink!.addEventListener("mousedown", (event:Event) => handleImageLinkMouseDown(event));
-	nftCardImageLink!.addEventListener("mouseenter", (event:Event) => handleImageLinkMouseEnter(event));
-	nftCardImageLink!.addEventListener("mouseleave", (event:Event) => handleImageLinkMouseLeave(event));
-	nftCardImageLink!.addEventListener("touchstart", (event:Event) => handleImageLinkTouchStart(event));
-	nftCardImageLink!.addEventListener("touchend", (event:Event) => handleImageLinkTouchEnd(event));
+	nftCardImageLink!.addEventListener("click", () => handleImageClick());
+	nftCardImageLink!.addEventListener("mouseenter", () => handleImageMouseEnter());
+	nftCardImageLink!.addEventListener("mouseleave", () => handleImageMouseLeave());
+	nftCardImageLink!.addEventListener("touchstart", () => handleImageTouchStart());
+	nftCardImageLink!.addEventListener("touchend", () => handleImageTouchEnd());
+
+	nftCardOverlay!.addEventListener("click", () => handleOverlayClick());
 
 	const handleLinkMouseUp = (event: Event) => {
 		gsap.to(event.target, {
@@ -77,108 +81,25 @@
 		});
 	};
 
-	const handleImageLinkMouseUp = (event: Event) => {
-		gsap.to(nftCardImageLink, {
-			scale: 1,
-			duration: 0.25,
-			ease: "power1"
-		});
-	};
+	const handleImageClick = () => {
+		isImagePreviewActive = true;
 
-	const handleImageLinkMouseDown = (event: Event) => {
-		gsap.to(nftCardImageLink, {
-			scale: 0.95,
-			duration: 0.25,
-			ease: "power1"
-		});
-	};
-
-	const handleImageLinkMouseEnter  = (event: Event) => {
-		gsap.set(nftCardImageIcon, {
-			opacity: 0,
-			scale: 0.8,
-			filter: "blur(4px)",
-		})
-
-		gsap.to(nftCardImageBackground, {
-			opacity:  1,
-			scale: 1,
-			duration: 0.25,
-			ease: "power1"
+		gsap.set(nftCardOverlay, {
+			display: "block",
 		});
 
-		gsap.to(nftCardImageIcon, {
-			opacity:  1,
-			scale: 1,
-			filter: "blur(0px)",
-			duration: 0.25,
-			ease: "power1"
-		});
-	};
-
-	const handleImageLinkMouseLeave  = (event: Event) => {
-		gsap.set(nftCardImageIcon, {
+		gsap.to(nftCardOverlay, {
 			opacity: 1,
-			scale: 1,
-			filter: "blur(0px)",
-		})
-
-		gsap.to(nftCardImageIcon, {
-			opacity: 0,
-			scale: 0.8,
-			filter: "blur(4px)",
 			duration: 0.25,
 			ease: "power1"
 		});
-
-		gsap.to(nftCardImageBackground, {
-			opacity:  0,
-			scale: 1,
-			duration: 0.25,
-			ease: "power1"
-		});
-	};
-
-	const handleImageLinkTouchStart = (event: Event) => {
-		gsap.set(nftCardImageIcon, {
-			opacity: 0,
-			scale: 0.8,
-			filter: "blur(4px)",
-		})
 
 		gsap.to(nftCardImageLink, {
-			scale: 0.95,
+			scale: 1.6,
+			translateY: "40%",
 			duration: 0.25,
-			ease: "power1"
-		});
-
-		gsap.to(nftCardImageBackground, {
-			opacity:  1,
-			scale: 1,
-			duration: 0.25,
-			ease: "power1"
-		});
-
-		gsap.to(nftCardImageIcon, {
-			opacity:  1,
-			scale: 1,
-			filter: "blur(0px)",
-			duration: 0.25,
-			ease: "power1"
-		});
-	};
-
-	const handleImageLinkTouchEnd = (event: Event) => {
-		gsap.set(nftCardImageIcon, {
-			opacity: 1,
-			scale: 1,
-			filter: "blur(0px)",
-		})
-
-		gsap.to(nftCardImageLink, {
-			scale: 1,
-			duration: 0.25,
-			ease: "power1"
+			cursor: "default",
+			ease: "power1",
 		});
 
 		gsap.to(nftCardImageIcon, {
@@ -191,7 +112,117 @@
 
 		gsap.to(nftCardImageBackground, {
 			opacity:  0,
+			duration: 0.25,
+			ease: "power1"
+		});
+	};
+
+	const handleOverlayClick = () => {
+		gsap.to(nftCardOverlay, {
+			opacity: 0,
+			duration: 0.25,
+			ease: "power1",
+			onComplete: (event: Event) => {
+				gsap.to(nftCardOverlay, {
+					display: "none"
+				})
+			}
+		})
+
+		gsap.to(nftCardImageLink, {
 			scale: 1,
+			translateY: 0,
+			duration: 0.25,
+			ease: "power1",
+			onComplete: () => {
+				gsap.to(nftCardImageLink, {
+					cursor: "pointer",
+				});
+
+				isImagePreviewActive = false;
+			}
+		});
+	}
+
+	const handleImageMouseEnter  = () => {
+		if (isImagePreviewActive) return;
+
+		gsap.set(nftCardImageIcon, {
+			opacity: 0,
+			scale: 0.8,
+			filter: "blur(4px)",
+		});
+
+		gsap.to(nftCardImageIcon, {
+			opacity:  1,
+			scale: 1,
+			filter: "blur(0px)",
+			duration: 0.25,
+			ease: "power1"
+		});
+
+		gsap.to(nftCardImageBackground, {
+			opacity:  1,
+			duration: 0.25,
+			ease: "power1"
+		});
+	};
+
+	const handleImageMouseLeave  = () => {
+		if (isImagePreviewActive) return;
+
+		gsap.to(nftCardImageIcon, {
+			opacity: 0,
+			scale: 0.8,
+			filter: "blur(4px)",
+			duration: 0.25,
+			ease: "power1"
+		});
+
+		gsap.to(nftCardImageBackground, {
+			opacity:  0,
+			duration: 0.25,
+			ease: "power1"
+		});
+	};
+
+	const handleImageTouchStart = () => {
+		if (isImagePreviewActive) return;
+
+		gsap.set(nftCardImageIcon, {
+			opacity: 0,
+			scale: 0.8,
+			filter: "blur(4px)",
+		})
+
+		gsap.to(nftCardImageBackground, {
+			opacity:  1,
+			duration: 0.25,
+			ease: "power1"
+		});
+
+		gsap.to(nftCardImageIcon, {
+			opacity: 1,
+			scale: 1,
+			filter: "blur(0px)",
+			duration: 0.25,
+			ease: "power1"
+		});
+	};
+
+	const handleImageTouchEnd = () => {
+		if (isImagePreviewActive) return;
+
+		gsap.to(nftCardImageIcon, {
+			opacity: 0,
+			scale: 0.8,
+			filter: "blur(4px)",
+			duration: 0.25,
+			ease: "power1"
+		});
+
+		gsap.to(nftCardImageBackground, {
+			opacity: 0,
 			duration: 0.25,
 			ease: "power1"
 		});
@@ -200,7 +231,7 @@
 
 <article class="nft-card">
 	<header>
-		<a data-nft-card-image-link  class="nft-card__image-wrapper" href="#">
+		<button data-nft-card-image-link  class="nft-card__image-wrapper" type="button">
 			<picture>
 				<source
 					media="(min-width: 375px)"
@@ -213,12 +244,12 @@
 					src="/images/equilibrium-image.jpg"
 				/>
 			</picture>
-			<div data-nft-card-image-background class="nft-card__image-background">
+			<span data-nft-card-image-background class="nft-card__image-background">
 				<svg data-nft-card-image-icon class="nft-card__image-background-icon" width="44" height="30" viewBox="0 0 44 30" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path fill-rule="evenodd" clip-rule="evenodd" d="M22 0C12 0 3.46 6.22 0 15C3.46 23.78 12 30 22 30C32.01 30 40.54 23.78 44 15C40.54 6.22 32.01 0 22 0ZM22 25C16.48 25 12 20.52 12 15C12 9.48 16.48 5 22 5C27.52 5 32 9.48 32 15C32 20.52 27.52 25 22 25ZM16 15C16 11.69 18.69 9 22 9C25.31 9 28 11.69 28 15C28 18.31 25.31 21 22 21C18.69 21 16 18.31 16 15Z" fill="white" />
 				</svg>
-			</div>
-		</a>
+			</span>
+		</button>
 	</header>
 	<div class="nft-card__content">
 		<a class="nft-card__title-wrapper" href="#">
@@ -259,8 +290,22 @@
 		</p>
 	</footer>
 </article>
+<div data-nft-card-overlay class="nft-card__overlay"></div>
 
 <style>
+	.nft-card__overlay {
+		display: none;
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.8);
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+		z-index: 1;
+	}
+
 	.nft-card {
 		border-radius: 1.5rem;
 		box-shadow: 0 2.5rem 5rem 0 rgba(0, 0, 0, 0.1);
@@ -270,6 +315,7 @@
 		max-width: 32.7rem;
 		margin-left: 2.4rem;
 		margin-right: 2.4rem;
+		position: relative;
 
 		@media (width >= 768px) {
 			max-width: 35rem;
@@ -283,6 +329,9 @@
 		overflow: hidden;
 		position: relative;
 		display: block;
+		border: none;
+		cursor: pointer;
+		z-index: 2;
 	}
 
 	.nft-card__image {
