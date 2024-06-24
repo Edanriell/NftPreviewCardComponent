@@ -82,6 +82,8 @@
 	};
 
 	const handleImageClick = () => {
+		if (isImagePreviewActive) return;
+
 		isImagePreviewActive = true;
 
 		gsap.set(nftCardOverlay, {
@@ -121,12 +123,8 @@
 		gsap.to(nftCardOverlay, {
 			opacity: 0,
 			duration: 0.25,
+			display: "none",
 			ease: "power1",
-			onComplete: (event: Event) => {
-				gsap.to(nftCardOverlay, {
-					display: "none"
-				})
-			}
 		})
 
 		gsap.to(nftCardImageLink, {
@@ -138,7 +136,6 @@
 				gsap.to(nftCardImageLink, {
 					cursor: "pointer",
 				});
-
 				isImagePreviewActive = false;
 			}
 		});
